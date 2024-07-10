@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -19,10 +20,11 @@ class Movie extends Model
         'popularity',
         'vote_avarage',
         'vote_count',
+        'release_date',
     ];
 
-    public function genre(): HasOne
+    public function genres(): BelongsToMany
     {
-        return $this->hasOne(Genre::class);
+        return $this->belongsToMany(Genre::class);
     }
 }
