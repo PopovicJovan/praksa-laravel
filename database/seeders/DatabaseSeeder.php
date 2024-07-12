@@ -3,7 +3,14 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Genre;
+use App\Models\Movie;
+use Illuminate\Database\QueryException;
 use Illuminate\Database\Seeder;
+use GuzzleHttp;
+use Illuminate\Support\Facades\Http;
+
+;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +25,45 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $header = [
+            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNWVhZmRmNGUyOGYzY2Y2NGZkYWUxOGRkZDNmMmFhZSIsIm5iZiI6MTcyMDc5MjQ5Ny44OTUwMTIsInN1YiI6IjY2OGZhMzU3ZDQyOWU4OTcyMWQ1MmI4NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ETEr3-rrUp58ctEqXf_eyRv4PmaQJLCwYQOJhyPl2kQ',
+            'accept' => 'application/json',
+        ];
+
+        $genres = Http::withHeaders($header)->get('https://api.themoviedb.org/3/genre/movie/list?language=en')->body();
+        $genres = json_decode($genres, true);
+        $genres = $genres['genres'];
+        foreach ($genres as $genre) {
+            $g = new Genre();
+            $g->id = $genre['id'];
+            $g->title = $genre['name'];
+            $g->save();
+        }
+        
+        $movies = Http::withHeaders($header)->get('https://api.themoviedb.org/3/discover/movie')->body();
+        $movies = json_decode($movies, true);
+        $total_pages = $movies['total_pages'];
+        for ($i = 1; $i < 1000; $i++) {
+            try {
+                $movies = Http::withHeaders($header)->get('https://api.themoviedb.org/3/discover/movie?page=' . $i)->body();
+                $movies = json_decode($movies, true);
+                $movies = $movies['results'];
+                foreach ($movies as $movie) {
+                    try {
+                        $m = new Movie();
+                        $m->id = $movie['id'];
+                        $m->adult = true;
+                        if (!$movie['adult']) $m->adult = false;
+                        $m->title = $movie['title'];
+                        $m->overview = $movie['overview'];
+                        $m->release_date = $movie['release_date'];
+                        $m->save();
+                        $genres = $movie['genre_ids'];
+                        $m->genres()->sync($genres);
+                    } catch (QueryException $e) {}
+                }
+            } catch (\ErrorException $e){}
+        }
     }
+
 }
