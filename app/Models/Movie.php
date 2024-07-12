@@ -14,12 +14,12 @@ class Movie extends Model
     protected $fillable = [
         'id',
         'adult',
-        'genre',
         'title',
         'overview',
         'popularity',
-        'vote_avarage',
+        'vote_average',
         'vote_count',
+        'release_date',
     ];
 
     public function genres(): BelongsToMany

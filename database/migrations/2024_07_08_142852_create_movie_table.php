@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('overview');
             $table->integer('popularity')->default(0);
-            $table->float('vote_avarage')->default(0);
+            $table->float('vote_average')->default(0);
             $table->integer('vote_count')->default(0);
+            $table->date('release_date');
             $table->timestamps();
         });
     }
