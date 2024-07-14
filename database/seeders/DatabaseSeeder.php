@@ -19,12 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         $header = [
             'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNWVhZmRmNGUyOGYzY2Y2NGZkYWUxOGRkZDNmMmFhZSIsIm5iZiI6MTcyMDc5MjQ5Ny44OTUwMTIsInN1YiI6IjY2OGZhMzU3ZDQyOWU4OTcyMWQ1MmI4NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ETEr3-rrUp58ctEqXf_eyRv4PmaQJLCwYQOJhyPl2kQ',
             'accept' => 'application/json',
@@ -34,29 +29,29 @@ class DatabaseSeeder extends Seeder
         $genres = json_decode($genres, true);
         $genres = $genres['genres'];
         foreach ($genres as $genre) {
-            $g = new Genre();
-            $g->id = $genre['id'];
-            $g->title = $genre['name'];
+            $g = new Genre([
+                'id' => $genre['id'],
+                'title' => $genre['name']
+            ]);
             $g->save();
         }
-        
-        $movies = Http::withHeaders($header)->get('https://api.themoviedb.org/3/discover/movie')->body();
-        $movies = json_decode($movies, true);
-        $total_pages = $movies['total_pages'];
-        for ($i = 1; $i < 1000; $i++) {
+
+        for ($i = 1; $i < 100 ; $i++) {
             try {
                 $movies = Http::withHeaders($header)->get('https://api.themoviedb.org/3/discover/movie?page=' . $i)->body();
                 $movies = json_decode($movies, true);
                 $movies = $movies['results'];
                 foreach ($movies as $movie) {
                     try {
-                        $m = new Movie();
-                        $m->id = $movie['id'];
-                        $m->adult = true;
-                        if (!$movie['adult']) $m->adult = false;
-                        $m->title = $movie['title'];
-                        $m->overview = $movie['overview'];
-                        $m->release_date = $movie['release_date'];
+                        $m = new Movie([
+                            'id' => $movie['id'],
+                            'adult' => false,
+                            'title' => $movie['title'],
+                            'overview' => $movie['overview'],
+                            'release_date' => $movie['release_date'],
+                            'poster_path' => $movie['poster_path'],
+                        ]);
+                        if ($movie['adult']) $m->adult = true;
                         $m->save();
                         $genres = $movie['genre_ids'];
                         $m->genres()->sync($genres);

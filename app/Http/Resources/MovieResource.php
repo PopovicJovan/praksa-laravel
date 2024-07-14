@@ -26,6 +26,7 @@ class MovieResource extends JsonResource
             'vote_average' => $this->vote_average,
             'vote_count' => $this->vote_count,
             'release_date' => $this->release_date,
+            'poster_path' => $this->poster_path,
             'genres' => array_map(
                 function ($a) {return $a->id;},
                 $this->genres->all()

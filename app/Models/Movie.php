@@ -20,6 +20,7 @@ class Movie extends Model
         'vote_average',
         'vote_count',
         'release_date',
+        'poster_path',
     ];
 
     public function genres(): BelongsToMany

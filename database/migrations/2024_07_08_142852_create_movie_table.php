@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('vote_average')->default(0);
             $table->integer('vote_count')->default(0);
             $table->date('release_date');
+            $table->string('poster_path');
             $table->timestamps();
         });
     }
