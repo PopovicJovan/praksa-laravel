@@ -10,7 +10,12 @@ class MovieController extends Controller
 {
     public function index()
     {
-        $movies = Movie::all();
+        $title = request('title');
+
+        $movies = Movie::when($title, function ($query) use($title){
+            $query->where('title', 'LIKE', '%'. $title .'%');
+        })->get();
+
         return response()->json([
             "movies" => MovieResource::collection($movies)
         ]);
