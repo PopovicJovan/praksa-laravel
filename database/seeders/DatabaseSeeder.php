@@ -2,24 +2,18 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Seeder;
-use GuzzleHttp;
 use Illuminate\Support\Facades\Http;
 
-;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+
     public function run(): void
     {
-
         $header = [
             'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiNWVhZmRmNGUyOGYzY2Y2NGZkYWUxOGRkZDNmMmFhZSIsIm5iZiI6MTcyMDc5MjQ5Ny44OTUwMTIsInN1YiI6IjY2OGZhMzU3ZDQyOWU4OTcyMWQ1MmI4NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ETEr3-rrUp58ctEqXf_eyRv4PmaQJLCwYQOJhyPl2kQ',
             'accept' => 'application/json',
