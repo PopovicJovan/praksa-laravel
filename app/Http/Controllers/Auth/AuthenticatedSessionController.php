@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
-        
+
         $user = User::all()->where('email', $request->input('email'))->first();
         if (!$user) return response()->json([
             "message" => "User does not exist",
@@ -42,11 +42,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        $request->user()->tokens()->delete();
 
         return response()->noContent();
     }
