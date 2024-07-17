@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->boolean('adult');
+            $table->boolean('adult')->default(0);
             $table->string('title');
             $table->text('overview');
             $table->integer('popularity')->default(0);

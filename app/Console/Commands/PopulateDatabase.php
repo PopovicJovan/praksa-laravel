@@ -35,40 +35,41 @@ class PopulateDatabase extends Command
         ];
         $api_url = config('env.api_url');
 
+        $fetch = function ($url, $name) use($header, $api_url)
+        {
+            $var = Http::withHeaders($header)->get("$api_url/$url")->body();
+            $var = json_decode($var, true);
+            return $var[$name];
+        };
 
-        $genres = Http::withHeaders($header)->get("$api_url/genre/movie/list?language=en")->body();
-        $genres = json_decode($genres, true);
-        $genres = $genres['genres'];
+
+        $genres = $fetch('genre/movie/list?language=en', 'genres');
         foreach ($genres as $genre) {
-            $g = new Genre([
-                'id' => $genre['id'],
-                'title' => $genre['name']
-            ]);
-            $g->save();
+            $g = Genre::updateOrCreate(
+                ['id' => $genre['id']],
+                ['title' => $genre['name']]
+            );
         }
 
-        for ($i = 1; $i < 100 ; $i++) {
+        for ($i = 1; $i < 30 ; $i++) {
             try {
-                $movies = Http::withHeaders($header)->get("$api_url/discover/movie?page=$i")->body();
-                $movies = json_decode($movies, true);
-                $movies = $movies['results'];
+                $movies = $fetch("discover/movie?page=$i", 'results');
                 foreach ($movies as $movie) {
                     try {
-                        $m = new Movie([
-                            'id' => $movie['id'],
-                            'adult' => false,
-                            'title' => $movie['title'],
-                            'overview' => $movie['overview'],
-                            'release_date' => $movie['release_date'],
-                            'poster_path' => $movie['poster_path'],
-                            'popularity' => $movie['popularity'],
-                            'vote_average' => $movie['vote_average'],
-                            'vote_count' => $movie['vote_count']
-                        ]);
-                        if ($movie['adult']) $m->adult = true;
+                        $m = Movie::updateOrCreate(
+                            ['id' => $movie['id']],
+                            [   'title' => $movie['title'],
+                                'overview' => $movie['overview'],
+                                'release_date' => $movie['release_date'],
+                                'poster_path' => $movie['poster_path'],
+                                'popularity' => $movie['popularity'],
+                                'vote_average' => $movie['vote_average'],
+                                'vote_count' => $movie['vote_count']
+                            ]
+                        );
+                        $movie['adult'] ? $m->adult = true : $m->adult = false;
                         $m->save();
-                        $genres = $movie['genre_ids'];
-                        $m->genres()->sync($genres);
+                        $m->genres()->sync($movie['genre_ids']);
                     } catch (QueryException $e) {}
                 }
             } catch (\ErrorException $e){}
