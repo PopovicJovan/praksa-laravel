@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MovieCollection;
 use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class MovieController extends Controller
         })->get();
 
         return response()->json([
-            "movies" => MovieResource::collection($movies)
+            "movies" => new MovieCollection($movies)
         ]);
     }
 
