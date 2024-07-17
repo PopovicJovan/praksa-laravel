@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MovieCollection;
 use App\Http\Resources\MovieResource;
+use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
@@ -11,20 +13,23 @@ class MovieController extends Controller
     public function index()
     {
         $title = request('title');
-
+        $genre = request('genre');
+        
         $movies = Movie::when($title, function ($query) use($title){
             $query->where('title', 'LIKE', '%'. $title .'%');
         })->get();
 
+        if ($genre) {
+            $movies = $movies->filter(function ($movie) use ($genre) {
+                return $movie->genres->contains('title', $genre);
+            });
+        }
+
         return response()->json([
-            "movies" => MovieResource::collection($movies)
+            "movies" => new MovieCollection($movies)
         ]);
     }
 
-    public function store(Request $request)
-    {
-        //
-    }
 
     public function show(string $id)
     {
@@ -39,13 +44,4 @@ class MovieController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
-    }
 }

@@ -32,7 +32,5 @@ class MovieResource extends JsonResource
                 $this->genres->all()
             )
         ];
-
-
     }
 }
