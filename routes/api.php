@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\GenreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/movie', MovieController::class)
+Route::apiResource('/movie', MovieController::class)
     ->only(['index', 'show']);
 //    ->middleware('auth:sanctum');
+
+Route::apiResource('/genre', GenreController::class);
+Route::get('/genre/{genre}/movies', [GenreController::class, 'getAllMovies']);
