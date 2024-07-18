@@ -27,4 +27,9 @@ class Movie extends Model
     {
         return $this->belongsToMany(Genre::class);
     }
+
+    public function rates(): HasMany
+    {
+        return $this->hasMany(Rate::class);
+    }
 }

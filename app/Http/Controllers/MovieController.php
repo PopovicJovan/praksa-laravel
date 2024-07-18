@@ -25,8 +25,9 @@ class MovieController extends Controller
             });
         }
 
+
         return response()->json([
-            "movies" => new MovieCollection($movies)
+            "movies" => new MovieCollection($movies->sortByDesc('popularity'))
         ]);
     }
 
