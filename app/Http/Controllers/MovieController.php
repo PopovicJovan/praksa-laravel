@@ -7,6 +7,7 @@ use App\Http\Resources\MovieResource;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class MovieController extends Controller
 {
@@ -43,6 +44,26 @@ class MovieController extends Controller
         return response()->json([
             "movie" => new MovieResource($movie)
         ]);
+    }
+
+    public function getPicture(string $width, string $path)
+    {
+        if (!in_array($width, [200,300,400,500])){
+            return response()->json([
+                "message" => "Width has to be 200,300,400 or 500"
+            ], 400);
+        }
+
+        $response = Http::get(config('env.img_api_url')."/w$width/$path");
+
+        if ($response->successful()) {
+            return response($response->body(), 200)
+                ->header('Content-Type', $response->header('Content-Type'));
+        }
+        return response()->json([
+            "message" => "Bad url"
+        ], 400);
+
     }
 
 

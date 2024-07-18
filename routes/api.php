@@ -34,3 +34,5 @@ Route::post('/movie/{movie}/comment', [CommentController::class, 'store'])->midd
 Route::get('/movie/{movie}/comment', [CommentController::class, 'index']);
 Route::put('/comment/{comment}', [CommentController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->middleware('auth:sanctum');
+
+Route::get('/movie/picture/{width}/{path}', [MovieController::class, 'getPicture']);
