@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\RateController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +24,13 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::apiResource('/movie', MovieController::class)
     ->only(['index', 'show']);
-//    ->middleware('auth:sanctum');
 
-Route::apiResource('/genre', GenreController::class);
-Route::get('/genre/{genre}/movies', [GenreController::class, 'getAllMovies']);
+Route::apiResource('/genre', GenreController::class)->only(['index', 'show']);
+Route::get('/genre/{genre}/movie', [GenreController::class, 'getAllMovies']);
 
-Route::post('/movie/{movieId}/rate', [\App\Http\Controllers\RateController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/movie/{movie}/rate', [RateController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/movie/{movie}/rate', [RateController::class, 'show'])->middleware('auth:sanctum');
+Route::post('/movie/{movie}/comment', [CommentController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/movie/{movie}/comment', [CommentController::class, 'getAllComment']);
+Route::put('/comment/{comment}', [CommentController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->middleware('auth:sanctum');

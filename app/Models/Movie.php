@@ -32,4 +32,9 @@ class Movie extends Model
     {
         return $this->hasMany(Rate::class);
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
