@@ -26,3 +26,5 @@ Route::apiResource('/movie', MovieController::class)
 
 Route::apiResource('/genre', GenreController::class);
 Route::get('/genre/{genre}/movies', [GenreController::class, 'getAllMovies']);
+
+Route::post('/movie/{movieId}/rate', [\App\Http\Controllers\RateController::class, 'store'])->middleware('auth:sanctum');

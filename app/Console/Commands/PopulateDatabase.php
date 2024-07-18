@@ -62,9 +62,7 @@ class PopulateDatabase extends Command
                                 'overview' => $movie['overview'],
                                 'release_date' => $movie['release_date'],
                                 'poster_path' => $movie['poster_path'],
-                                'popularity' => $movie['popularity'],
-                                'vote_average' => $movie['vote_average'],
-                                'vote_count' => $movie['vote_count']
+                                'popularity' => $movie['popularity']
                             ]
                         );
                         $movie['adult'] ? $m->adult = true : $m->adult = false;
