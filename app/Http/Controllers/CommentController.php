@@ -22,7 +22,10 @@ class CommentController extends Controller
         $user = $request->user();
         $comment = $request->input('comment');
         $movie = Movie::find($movie);
-
+        
+        if(!$comment) return response()->json([
+            "message" => "No comment"
+        ], 400);
         if (!$movie){
             return response()->json([
                 "message" => "Movie does not exist"
@@ -53,6 +56,9 @@ class CommentController extends Controller
 
     public function update(Request $request, Comment $comment)
     {
+        if(!$comment) return response()->json([
+            "message" => "No comment"
+        ], 400);
         $comment->comment = $request->input('comment');
         $comment->save();
         return response()->noContent();
