@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CommentCollection;
 use App\Models\Comment;
 use App\Models\Movie;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    use AuthorizesRequests;
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except('index');
+        $this->authorizeResource(Comment::class, ['comment']);
+    }
+
     public function store(string $movie, Request $request)
     {
         $user = $request->user();
@@ -31,25 +39,27 @@ class CommentController extends Controller
 
     }
 
-    public function getAllComment(string $movie, Request $request)
+    public function index(string $movie, Request $request)
     {
-        $comments = Movie::find($movie)->comments->sortByDesc('updated_at');
+        $movie = Movie::find($movie);
+        if (!$movie) return response()->json([
+            "message" => "Movie does not exist"
+        ]);
+        $comments = $movie->comments->sortByDesc('updated_at');
         return response()->json([
             'comments' => new CommentCollection($comments)
         ]);
     }
 
-    public function update(string $comment, Request $request)
+    public function update(Request $request, Comment $comment)
     {
-        $comment = Comment::find($comment);
-        $comment->update($request->only('comment'));
+        $comment->comment = $request->input('comment');
         $comment->save();
         return response()->noContent();
     }
 
-    public function destroy(string $comment)
+    public function destroy(Comment $comment)
     {
-        $comment = Comment::find($comment);
         $comment->delete();
         return response()->noContent();
     }

@@ -31,6 +31,6 @@ Route::get('/genre/{genre}/movie', [GenreController::class, 'getAllMovies']);
 Route::post('/movie/{movie}/rate', [RateController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/movie/{movie}/rate', [RateController::class, 'show'])->middleware('auth:sanctum');
 Route::post('/movie/{movie}/comment', [CommentController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/movie/{movie}/comment', [CommentController::class, 'getAllComment']);
+Route::get('/movie/{movie}/comment', [CommentController::class, 'index']);
 Route::put('/comment/{comment}', [CommentController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->middleware('auth:sanctum');
