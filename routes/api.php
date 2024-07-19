@@ -24,12 +24,13 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::apiResource('/movie', MovieController::class)
     ->only(['index', 'show']);
+Route::get('/movie/picture/{width}/{path}', [MovieController::class, 'getPicture']);
 
 Route::apiResource('/genre', GenreController::class)->only(['index', 'show']);
 Route::get('/genre/{genre}/movie', [GenreController::class, 'getAllMovies']);
 
 Route::get('/movie/{movie}/comment', [CommentController::class, 'index']);
-Route::get('/movie/picture/{width}/{path}', [MovieController::class, 'getPicture']);
+
 
 Route::middleware('auth:sanctum')->group(function (){
     Route::post('/movie/{movie}/rate', [RateController::class, 'store']);
