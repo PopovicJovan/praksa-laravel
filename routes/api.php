@@ -28,11 +28,13 @@ Route::apiResource('/movie', MovieController::class)
 Route::apiResource('/genre', GenreController::class)->only(['index', 'show']);
 Route::get('/genre/{genre}/movie', [GenreController::class, 'getAllMovies']);
 
-Route::post('/movie/{movie}/rate', [RateController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/movie/{movie}/rate', [RateController::class, 'show'])->middleware('auth:sanctum');
-Route::post('/movie/{movie}/comment', [CommentController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/movie/{movie}/comment', [CommentController::class, 'index']);
-Route::put('/comment/{comment}', [CommentController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->middleware('auth:sanctum');
-
 Route::get('/movie/picture/{width}/{path}', [MovieController::class, 'getPicture']);
+
+Route::middleware('auth:sanctum')->group(function (){
+    Route::post('/movie/{movie}/rate', [RateController::class, 'store']);
+    Route::get('/movie/{movie}/rate', [RateController::class, 'show']);
+    Route::post('/movie/{movie}/comment', [CommentController::class, 'store']);
+    Route::put('/comment/{comment}', [CommentController::class, 'update']);
+    Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);
+});
