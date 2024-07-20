@@ -27,7 +27,9 @@ class RateController extends Controller
                 "message" => "Value of rate has to be between 1 and 5"
             ], 400);
         }
-        if (!Rate::where('user_id', $user->id)->where('movie_id', $movie->id)->first()){
+        if (!Rate::where('user_id', $user->id)
+            ->where('movie_id', $movie->id)
+            ->first()){
             $movie->vote_count += 1;
         }
         Rate::updateOrCreate(
