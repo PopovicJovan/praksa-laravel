@@ -20,6 +20,11 @@ class GenreController extends Controller
 
     public function getAllMovies(string $genre)
     {
+        $genre = Genre::find($genre);
+        if(!$genre) return response()->json([
+            "message" => "Genre does not exist"
+        ], 404);
+
         $movies = Movie::all();
         $movies = $movies->filter(function ($movie) use ($genre) {
             return $movie->genres->contains('id', $genre);
@@ -33,6 +38,9 @@ class GenreController extends Controller
     public function show(string $id)
     {
         $genre = Genre::find($id);
+        if(!$genre) return response()->json([
+            "message" => "Genre does not exist"
+        ], 404);
         return response()->json([
             'genre' => new GenreResource($genre)
         ]);

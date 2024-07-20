@@ -20,7 +20,7 @@ class RateController extends Controller
         if (!$movie){
             return response()->json([
                 "message" => "Movie does not exist"
-            ], 400);
+            ], 404);
         }
         if ($rate > 5 or $rate < 1) {
             return response()->json([
@@ -42,14 +42,20 @@ class RateController extends Controller
 
         $movie->vote_average = $movie->rates()->avg('rate');
         $movie->save();
-        return response()->noContent();
+        return response()->json([], 200);
     }
 
     public function show(string $movie, Request $request)
     {
+        $movie = Movie::find($movie);
+        if (!$movie){
+            return response()->json([
+                "message" => "Movie does not exist"
+            ], 404);
+        }
         $rate = Rate::where('movie_id', $movie)->where('user_id', $request->user()->id)->first();
         return response()->json([
             "rate" => new RateResource($rate)
-        ]);
+        ], 200);
     }
 }

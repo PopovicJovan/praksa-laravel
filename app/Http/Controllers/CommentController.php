@@ -29,7 +29,7 @@ class CommentController extends Controller
         if (!$movie){
             return response()->json([
                 "message" => "Movie does not exist"
-            ], 400);
+            ], 404);
         }
 
         Comment::create([
@@ -38,7 +38,7 @@ class CommentController extends Controller
             'comment' => $comment
         ]);
 
-        return response()->noContent();
+        return response()->json([],200);
 
     }
 
@@ -47,7 +47,7 @@ class CommentController extends Controller
         $movie = Movie::find($movie);
         if (!$movie) return response()->json([
             "message" => "Movie does not exist"
-        ]);
+        ], 404);
         $comments = $movie->comments->sortByDesc('updated_at');
         return response()->json([
             'comments' => new CommentCollection($comments)
@@ -56,12 +56,10 @@ class CommentController extends Controller
 
     public function update(Request $request, Comment $comment)
     {
-        if(!$comment) return response()->json([
-            "message" => "No comment"
-        ], 400);
+        if (!$request->input('comment')) return response()->json([], 200);
         $comment->comment = $request->input('comment');
         $comment->save();
-        return response()->noContent();
+        return response()->json([], 200);
     }
 
     public function destroy(Comment $comment)

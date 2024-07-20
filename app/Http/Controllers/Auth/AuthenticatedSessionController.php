@@ -21,14 +21,6 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $user = User::all()->where('email', $request->input('email'))->first();
-        if (!$user) return response()->json([
-            "message" => "User does not exist",
-        ], 400);
-
-        if (!Hash::check($request->input('password'), $user->password))
-            return response()->json([
-                "message" => "Invalid credentials"
-            ], 400);
 
         $token = $user->createToken('api-token');
         return response()->json([
@@ -43,10 +35,6 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         $user = $request->user();
-        if (!$user)
-            return response()->json([
-                "message" => "Invalid token"
-            ], 400);
         $user->tokens()->delete();
 
         return response()->noContent();
