@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MovieCollection;
 use App\Http\Resources\MovieResource;
-use App\Models\Genre;
 use App\Models\Movie;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class MovieController extends Controller
@@ -33,14 +31,8 @@ class MovieController extends Controller
     }
 
 
-    public function show(string $id)
+    public function show(Movie $movie)
     {
-        $movie = Movie::find($id);
-
-        if (!$movie) return response()->json([
-            "message" => "Movie does not exist"
-        ], 404);
-
         return response()->json([
             "movie" => new MovieResource($movie)
         ]);

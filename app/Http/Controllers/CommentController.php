@@ -17,20 +17,14 @@ class CommentController extends Controller
         $this->authorizeResource(Comment::class, ['comment']);
     }
 
-    public function store(string $movie, Request $request)
+    public function store(Movie $movie, Request $request)
     {
         $user = $request->user();
         $comment = $request->input('comment');
-        $movie = Movie::find($movie);
         
         if(!$comment) return response()->json([
             "message" => "No comment"
         ], 400);
-        if (!$movie){
-            return response()->json([
-                "message" => "Movie does not exist"
-            ], 404);
-        }
 
         Comment::create([
             'user_id' => $user->id,
@@ -42,12 +36,8 @@ class CommentController extends Controller
 
     }
 
-    public function index(string $movie, Request $request)
+    public function index(Movie $movie, Request $request)
     {
-        $movie = Movie::find($movie);
-        if (!$movie) return response()->json([
-            "message" => "Movie does not exist"
-        ], 404);
         $comments = $movie->comments->sortByDesc('updated_at');
         return response()->json([
             'comments' => new CommentCollection($comments)

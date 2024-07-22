@@ -5,23 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RateResource;
 use App\Models\Movie;
 use App\Models\Rate;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class RateController extends Controller
 {
-    public function store(string $movie, Request $request)
+    public function store(Movie $movie, Request $request)
     {
         $user = $request->user();
         $rate = $request->input('rate');
 
-        $movie = Movie::find($movie);
-
-        if (!$movie){
-            return response()->json([
-                "message" => "Movie does not exist"
-            ], 404);
-        }
         if ($rate > 5 or $rate < 1) {
             return response()->json([
                 "message" => "Value of rate has to be between 1 and 5"
@@ -45,14 +37,8 @@ class RateController extends Controller
         return response()->json([], 200);
     }
 
-    public function show(string $movie, Request $request)
+    public function show(Movie $movie, Request $request)
     {
-        $movie = Movie::find($movie);
-        if (!$movie){
-            return response()->json([
-                "message" => "Movie does not exist"
-            ], 404);
-        }
         $rate = Rate::where('movie_id', $movie)->where('user_id', $request->user()->id)->first();
         return response()->json([
             "rate" => new RateResource($rate)
