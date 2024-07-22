@@ -21,7 +21,7 @@ class GenreController extends Controller
     {
         $movies = Movie::all();
         $movies = $movies->filter(function ($movie) use ($genre) {
-            return $movie->genres->contains('id', $genre);
+            return $movie->genres->contains('id', $genre->id);
         });
 
         return response()->json([

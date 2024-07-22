@@ -39,7 +39,7 @@ class RateController extends Controller
 
     public function show(Movie $movie, Request $request)
     {
-        $rate = Rate::where('movie_id', $movie)->where('user_id', $request->user()->id)->first();
+        $rate = Rate::where('movie_id', $movie->id)->where('user_id', $request->user()->id)->first();
         return response()->json([
             "rate" => new RateResource($rate)
         ], 200);
