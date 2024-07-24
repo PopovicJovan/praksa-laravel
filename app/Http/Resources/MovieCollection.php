@@ -20,7 +20,8 @@ class MovieCollection extends ResourceCollection
                     'id' => $movie->id,
                     'title' => $movie->title,
                     'adult' => $movie->adult,
-                    'poster_path' => $movie->poster_path
+                    'poster_path' => $movie->poster_path,
+                    'genres' => GenreResource::collection($movie->genres)
                 ];
             }
         )->all();

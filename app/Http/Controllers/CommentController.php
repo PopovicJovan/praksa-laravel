@@ -22,9 +22,7 @@ class CommentController extends Controller
         $user = $request->user();
         $comment = $request->input('comment');
         
-        if(!$comment) return response()->json([
-            "message" => "No comment"
-        ], 400);
+        $request->validate(['comment' => 'required|string']);
 
         Comment::create([
             'user_id' => $user->id,

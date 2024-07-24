@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\MovieCollection;
 use App\Http\Resources\MovieResource;
 use App\Models\Movie;
-use Illuminate\Support\Facades\Http;
 
 class MovieController extends Controller
 {
@@ -15,18 +14,15 @@ class MovieController extends Controller
         $genre = request('genre');
         
         $movies = Movie::when($title, function ($query) use($title){
-            $query->where('title', 'LIKE', '%'. $title .'%');
-        })->get();
-
-        if ($genre) {
-            $movies = $movies->filter(function ($movie) use ($genre) {
-                return $movie->genres->contains('title', $genre);
-            });
-        }
-
+                    $query->where('title', 'LIKE', '%'. $title .'%');
+                })->when($genre, function ($query) use($genre){
+                    $query->whereHas('genres', function ($q) use($genre){
+                        $q->where('genres.id', $genre);
+                });
+                })->get();
 
         return response()->json([
-            "movies" => new MovieCollection($movies->sortByDesc('popularity'))
+            "movies" => new MovieCollection($movies)
         ]);
     }
 
@@ -38,25 +34,6 @@ class MovieController extends Controller
         ]);
     }
 
-    public function getPicture(string $width, string $path)
-    {
-        if (!in_array($width, [200,300,400,500])){
-            return response()->json([
-                "message" => "Width has to be 200,300,400 or 500"
-            ], 400);
-        }
-
-        $response = Http::get(config('env.img_api_url')."/w$width/$path");
-
-        if ($response->successful()) {
-            return response($response->body(), 200)
-                ->header('Content-Type', $response->header('Content-Type'));
-        }
-        return response()->json([
-            "message" => "Bad url"
-        ], 400);
-
-    }
 
 
 }

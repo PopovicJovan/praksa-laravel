@@ -14,11 +14,8 @@ class RateController extends Controller
         $user = $request->user();
         $rate = $request->input('rate');
 
-        if ($rate > 5 or $rate < 1) {
-            return response()->json([
-                "message" => "Value of rate has to be between 1 and 5"
-            ], 400);
-        }
+        $request->validate(['rate' => 'min:1|max:5']);
+
         if (!Rate::where('user_id', $user->id)
             ->where('movie_id', $movie->id)
             ->first()){
@@ -39,7 +36,9 @@ class RateController extends Controller
 
     public function show(Movie $movie, Request $request)
     {
-        $rate = Rate::where('movie_id', $movie->id)->where('user_id', $request->user()->id)->first();
+        $rate = Rate::where('movie_id', $movie->id)
+                ->where('user_id', $request->user()->id)
+                ->firstOrFail();
         return response()->json([
             "rate" => new RateResource($rate)
         ], 200);

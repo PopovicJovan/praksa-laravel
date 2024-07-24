@@ -19,10 +19,9 @@ class GenreController extends Controller
 
     public function getAllMovies(Genre $genre)
     {
-        $movies = Movie::all();
-        $movies = $movies->filter(function ($movie) use ($genre) {
-            return $movie->genres->contains('id', $genre->id);
-        });
+        $movies = Movie::whereHas('genres', function ($query) use ($genre){
+            $query->where('genres.id', $genre->id);
+        })->get();
 
         return response()->json([
             "movies" => new MovieCollection($movies)
