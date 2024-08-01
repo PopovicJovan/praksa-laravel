@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\RateResource;
+use App\Http\Resources\Rate\RateResource;
 use App\Models\Movie;
 use App\Models\Rate;
 use Illuminate\Http\Request;
@@ -40,7 +40,7 @@ class RateController extends Controller
                 ->where('user_id', $request->user()->id)
                 ->firstOrFail();
         return response()->json([
-            "rate" => new RateResource($rate)
+            "data" => new RateResource($rate)
         ], 200);
     }
 }

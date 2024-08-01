@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CommentCollection;
+use App\Http\Resources\Comment\CommentCollection;
 use App\Models\Comment;
 use App\Models\Movie;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -38,7 +38,7 @@ class CommentController extends Controller
     {
         $comments = $movie->comments->sortByDesc('updated_at');
         return response()->json([
-            'comments' => new CommentCollection($comments)
+            'data' => new CommentCollection($comments)
         ]);
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\MovieCollection;
-use App\Http\Resources\MovieResource;
+use App\Http\Resources\Movie\MovieResource;
+use App\Http\Resources\Movie\MovieCollection;
 use App\Models\Movie;
 
 class MovieController extends Controller
@@ -22,7 +22,7 @@ class MovieController extends Controller
                 })->get();
 
         return response()->json([
-            "movies" => new MovieCollection($movies)
+            "data" => new MovieCollection($movies)
         ]);
     }
 
@@ -30,7 +30,7 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         return response()->json([
-            "movie" => new MovieResource($movie)
+            "data" => new MovieResource($movie)
         ]);
     }
 
