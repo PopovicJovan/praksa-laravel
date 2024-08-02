@@ -37,4 +37,9 @@ class Movie extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function usersWatchingLater(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'watch_later');
+    }
 }
