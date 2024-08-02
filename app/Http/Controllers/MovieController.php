@@ -56,7 +56,7 @@ class MovieController extends Controller
     public function deleteWatchLaterMovies(Request $request, Movie $movie)
     {
         $user = $request->user();
-        if (!$user->watchLaterMovies()->find($movie->id))
+        if ($user->watchLaterMovies()->find($movie->id))
             $user->watchLaterMovies()->detach($movie->id);
         return response()->json([],200);
     }
