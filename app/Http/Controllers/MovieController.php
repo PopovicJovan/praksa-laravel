@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Movie\MovieResource;
 use App\Http\Resources\Movie\MovieCollection;
 use App\Models\Movie;
+use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
@@ -40,28 +41,23 @@ class MovieController extends Controller
         $movies = $user->watchLaterMovies;
 
         return response()->json([
-            "movies" => new MovieCollection($movies)
+            "data" => new MovieCollection($movies)
         ]);
     }
 
-    public function setWatchLaterMovies(Request $request, string $movie)
+    public function setWatchLaterMovies(Request $request, Movie $movie)
     {
         $user = $request->user();
-        if (!Movie::find($movie))
-            return response()->json([
-                "message" => "Movie does not exist"
-            ], 400);
-
-        if (!$user->watchLaterMovies()->find($movie))
-            $user->watchLaterMovies()->attach($movie);
+        if (!$user->watchLaterMovies()->find($movie->id))
+            $user->watchLaterMovies()->attach($movie->id);
         return response()->json([],200);
     }
 
-    public function deleteWatchLaterMovies(Request $request, string $movie)
+    public function deleteWatchLaterMovies(Request $request, Movie $movie)
     {
         $user = $request->user();
-        if (!$user->watchLaterMovies()->find($movie))
-            $user->watchLaterMovies()->detach($movie);
+        if (!$user->watchLaterMovies()->find($movie->id))
+            $user->watchLaterMovies()->detach($movie->id);
         return response()->json([],200);
     }
 
