@@ -41,6 +41,9 @@ Route::get('/movie/{movie}/comment', [CommentController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function (){
     Route::post('/movie/{movie}/rate', [RateController::class, 'store']);
     Route::get('/movie/{movie}/rate', [RateController::class, 'show']);
+    Route::get('/watch-later', [MovieController::class, 'getWatchLaterMovies']);
+    Route::post('/movie/{movie}/watch-later', [MovieController::class, 'setWatchLaterMovies']);
+    Route::delete('/movie/{movie}/watch-later', [MovieController::class, 'deleteWatchLaterMovies']);
     Route::post('/movie/{movie}/comment', [CommentController::class, 'store']);
     Route::put('/comment/{comment}', [CommentController::class, 'update']);
     Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);

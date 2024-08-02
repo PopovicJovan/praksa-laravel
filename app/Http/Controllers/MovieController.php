@@ -34,6 +34,37 @@ class MovieController extends Controller
         ]);
     }
 
+    public function getWatchLaterMovies(Request $request)
+    {
+        $user = $request->user();
+        $movies = $user->watchLaterMovies;
+
+        return response()->json([
+            "movies" => new MovieCollection($movies)
+        ]);
+    }
+
+    public function setWatchLaterMovies(Request $request, string $movie)
+    {
+        $user = $request->user();
+        if (!Movie::find($movie))
+            return response()->json([
+                "message" => "Movie does not exist"
+            ], 400);
+
+        if (!$user->watchLaterMovies()->find($movie))
+            $user->watchLaterMovies()->attach($movie);
+        return response()->json([],200);
+    }
+
+    public function deleteWatchLaterMovies(Request $request, string $movie)
+    {
+        $user = $request->user();
+        if (!$user->watchLaterMovies()->find($movie))
+            $user->watchLaterMovies()->detach($movie);
+        return response()->json([],200);
+    }
+
 
 
 }
