@@ -22,7 +22,8 @@ class CommentController extends Controller
         $user = $request->user();
         $comment = $request->input('comment');
         $parent_id = $request->input('parent_id');
-        
+        if($parent_id)
+            if(Comment::find($parent_id)->parent_id != null) return response()->json();
         $request->validate(['comment' => 'required|string']);
 
         Comment::create([
