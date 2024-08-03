@@ -51,7 +51,7 @@ class PopulateDatabase extends Command
             );
         }
 
-        for ($i = 1; $i < 30 ; $i++) {
+        for ($i = 1; $i < 15 ; $i++) {
             try {
                 $movies = $fetch("discover/movie?page=$i", 'results');
                 foreach ($movies as $movie) {
@@ -67,6 +67,14 @@ class PopulateDatabase extends Command
                         );
                         $movie['adult'] ? $m->adult = true : $m->adult = false;
                         $m->save();
+                        $results = $fetch("movie/$m->id/videos?language=en-US", 'results');
+                        foreach ($results as $result){
+                            if($result['type'] == "Trailer"){
+                                $m->trailer_link = $result['key'];
+                                $m->save();
+                                break;
+                            }
+                        }
                         $m->genres()->sync($movie['genre_ids']);
                     } catch (QueryException $e) {}
                 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('vote_count')->default(0);
             $table->date('release_date');
             $table->string('poster_path');
+            $table->string('trailer_link')->nullable();
             $table->timestamps();
         });
     }
