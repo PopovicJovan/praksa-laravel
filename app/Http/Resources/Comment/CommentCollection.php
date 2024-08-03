@@ -22,8 +22,10 @@ class CommentCollection extends ResourceCollection
                     'user_id' => $comment->user_id,
                     'user_name' => User::find($comment->user_id)->name,
                     'movie_id' => $comment->movie_id,
+                    'parent_id' => $comment->parent_id,
                     'comment' => $comment->comment,
-                    'created_at' => $comment->created_at
+                    'created_at' => $comment->created_at,
+                    'replies' => new CommentCollection($comment->replies)
                 ];
             }
         )->all();
