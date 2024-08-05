@@ -12,9 +12,9 @@ class RateController extends Controller
     public function store(Movie $movie, Request $request)
     {
         $user = $request->user();
-        $rate = $request->input('rate');
+        $rate = (int)$request->input('rate');
 
-        $request->validate(['rate' => 'min:1|max:5']);
+        $request->validate(['rate' => 'required|integer|between:1,5']);
 
         if (!Rate::where('user_id', $user->id)
             ->where('movie_id', $movie->id)

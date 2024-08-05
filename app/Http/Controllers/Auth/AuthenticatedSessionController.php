@@ -35,6 +35,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         $user = $request->user();
+        if($user == null) return response()->json([], 401);
         $user->tokens()->delete();
 
         return response()->noContent();

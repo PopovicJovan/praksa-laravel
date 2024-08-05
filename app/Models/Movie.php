@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Movie extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'id',
         'adult',
@@ -22,6 +23,8 @@ class Movie extends Model
         'release_date',
         'poster_path',
     ];
+
+
 
     public function genres(): BelongsToMany
     {
