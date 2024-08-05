@@ -26,6 +26,7 @@ class MovieResource extends JsonResource
             'vote_count' => $this->vote_count,
             'release_date' => $this->release_date,
             'poster_path' => $this->poster_path,
+            'trailer_link' => $this->trailer_link,
             'genres' => GenreResource::collection($this->genres),
             'comment_count' => $this->comments->count()
         ];

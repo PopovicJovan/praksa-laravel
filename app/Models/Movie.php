@@ -22,6 +22,7 @@ class Movie extends Model
         'vote_count',
         'release_date',
         'poster_path',
+        'trailer_link'
     ];
 
 
