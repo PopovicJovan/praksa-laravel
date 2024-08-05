@@ -44,7 +44,7 @@ class CommentController extends Controller
 
     public function update(Request $request, Comment $comment)
     {
-        if (!$request->input('comment')) return response()->json([], 200);
+        $request->validate(['comment' => 'required']);
         $comment->comment = $request->input('comment');
         $comment->save();
         return response()->json([], 200);

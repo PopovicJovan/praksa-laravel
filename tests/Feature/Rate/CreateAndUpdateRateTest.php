@@ -8,20 +8,6 @@ use Tests\TestCase;
 
 class CreateAndUpdateRateTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function login($email)
-    {
-        $response = $this->withHeaders([
-            'Accept' => 'application/json',
-        ])->post('/api/login', [
-            'email' => $email,
-            'password' => 'password'
-        ]);
-        return $response->json('token');
-    }
-
     public function test_post_rate_without_auth(): void
     {
         $response = $this->withHeaders([

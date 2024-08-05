@@ -11,20 +11,6 @@ use Tests\TestCase;
 
 class GetRateTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function login($email)
-    {
-        $response = $this->withHeaders([
-            'Accept' => 'application/json',
-        ])->post('/api/login', [
-            'email' => $email,
-            'password' => 'password'
-        ]);
-        return $response->json('token');
-    }
-
     public function test_get_rate_that_exists(): void
     {
         $rate = Rate::inRandomOrder()->first();
