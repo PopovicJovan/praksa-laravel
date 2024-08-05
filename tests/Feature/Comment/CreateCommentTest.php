@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Comment;
 
+use App\Models\Comment;
 use App\Models\Movie;
 use App\Models\User;
 use Tests\TestCase;
@@ -17,6 +18,24 @@ class CreateCommentTest extends TestCase
             "Accept" => "application/json"
         ])->post("/api/movie/$movie->id/comment?comment=komentarkomentar");
         $response->assertStatus(401);
+    }
+
+    public function test_create_reply()
+    {
+        $movie = Movie::inRandomOrder()->first();
+        $comment = Comment::where('parent_id', null)->first();
+        $user = User::inRandomOrder()->first();
+        $token = $this->login($user->email);
+
+        $response = $this->withHeaders([
+            "Authorization" => "Bearer $token",
+            "Accept" => "application/json"
+        ])->post("/api/movie/$movie->id/comment?comment=komentarkomentar&parent_id=$comment->id");
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('comments', [
+            'comment' => 'komentarkomentar',
+            'parent_id' => $comment->id
+        ]);
     }
 
     public function test_create_comment()

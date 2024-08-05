@@ -17,7 +17,8 @@ class GetCommentTest extends TestCase
                     "*" => [
                         'id', 'user_id',
                         'user_name', 'movie_id',
-                        'comment', 'created_at'
+                        'comment', 'created_at',
+                        'parent_id', 'replies'
                     ]
                 ]
             ]);
