@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Movie;
 
+use App\Http\Resources\Cast\CastCollection;
 use App\Http\Resources\Genre\GenreResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -28,7 +29,8 @@ class MovieResource extends JsonResource
             'poster_path' => $this->poster_path,
             'trailer_link' => $this->trailer_link,
             'genres' => GenreResource::collection($this->genres),
-            'comment_count' => $this->comments->count()
+            'comment_count' => $this->comments->count(),
+            'cast' => new CastCollection($this->cast->take(21))
         ];
     }
 }

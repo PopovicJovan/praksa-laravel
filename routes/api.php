@@ -8,6 +8,7 @@ use App\Http\Controllers\RateController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CastController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +31,14 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->midd
 
 Route::apiResource('/movie', MovieController::class)
     ->only(['index', 'show']);
-Route::get('/movie/picture/{width}/{path}', [MovieController::class, 'getPicture']);
 
-Route::apiResource('/genre', GenreController::class)->only(['index', 'show']);
+Route::apiResource('/genre', GenreController::class)
+    ->only(['index', 'show']);
 Route::get('/genre/{genre}/movie', [GenreController::class, 'getAllMovies']);
 
 Route::get('/movie/{movie}/comment', [CommentController::class, 'index']);
+Route::get('/movie/{movie}/cast', [CastController::class, 'index']);
+Route::get('/cast/{cast}', [CastController::class, 'show']);
 
 
 Route::middleware('auth:sanctum')->group(function (){

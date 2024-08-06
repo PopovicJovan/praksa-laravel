@@ -14,10 +14,14 @@ class CastCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'image_path' => $this->image_path
-        ];
+        return $this->collection->map(
+            function ($cast){
+                return [
+                    'id' => $cast->id,
+                    'name' => $cast->name,
+                    'image_path' => $cast->image_path
+                ];
+            }
+        )->all();
     }
 }
