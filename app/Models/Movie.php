@@ -23,7 +23,6 @@ class Movie extends Model
         'release_date',
         'poster_path',
         'trailer_link',
-        'parent_id'
     ];
 
 

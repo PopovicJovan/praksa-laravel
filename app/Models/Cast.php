@@ -10,7 +10,7 @@ class Cast extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'name', 'image_path', 'about'];
+    protected $fillable = ['id', 'name', 'image_path', 'about', 'role'];
 
     public function movies(): BelongsToMany
     {
