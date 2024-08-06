@@ -47,4 +47,9 @@ class Movie extends Model
     {
         return $this->belongsToMany(User::class, 'watch_later');
     }
+
+    public function cast(): BelongsToMany
+    {
+        return $this->belongsToMany(Cast::class, 'movie_cast');
+    }
 }

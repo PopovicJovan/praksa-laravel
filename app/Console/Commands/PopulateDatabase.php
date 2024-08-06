@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Cast;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Console\Command;
@@ -51,7 +52,7 @@ class PopulateDatabase extends Command
             );
         }
 
-        for ($i = 1; $i < 15 ; $i++) {
+        for ($i = 1; $i < 10 ; $i++) {
             try {
                 $movies = $fetch("discover/movie?page=$i", 'results');
                 foreach ($movies as $movie) {
@@ -67,6 +68,7 @@ class PopulateDatabase extends Command
                         );
                         $movie['adult'] ? $m->adult = true : $m->adult = false;
                         $m->save();
+                        $m->genres()->sync($movie['genre_ids']);
                         $results = $fetch("movie/$m->id/videos?language=en-US", 'results');
                         foreach ($results as $result){
                             if($result['type'] == "Trailer"){
@@ -75,7 +77,19 @@ class PopulateDatabase extends Command
                                 break;
                             }
                         }
-                        $m->genres()->sync($movie['genre_ids']);
+                        $cast = $fetch("movie/$m->id/credits?language=en-US", 'cast');
+                        foreach ($cast as $actor){
+                            $c = Cast::updateOrCreate(
+                                ['id' => $actor['id']],
+                                [
+                                 'id' => $actor['id'],
+                                 'name'=>  $actor['original_name'],
+                                 'image_path' => $actor['profile_path']
+                                ]
+                            );
+                            if(!$m->cast()->find($c->id))
+                                $m->cast()->attach($c->id);
+                        }
                     } catch (QueryException $e) {}
                 }
             } catch (\ErrorException $e){}
