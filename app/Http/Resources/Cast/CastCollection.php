@@ -19,7 +19,8 @@ class CastCollection extends ResourceCollection
                 return [
                     'id' => $cast->id,
                     'name' => $cast->name,
-                    'image_path' => $cast->image_path
+                    'image_path' => $cast->image_path,
+                    'role' => $cast->role
                 ];
             }
         )->all();

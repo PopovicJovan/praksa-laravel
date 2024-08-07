@@ -18,7 +18,8 @@ class CastResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image_path' => $this->image_path,
-            'about' => $this->about
+            'about' => $this->about,
+            'role' => $this->role
         ];
     }
 }
