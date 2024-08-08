@@ -5,8 +5,6 @@ namespace Tests\Feature\Rate;
 use App\Models\Movie;
 use App\Models\Rate;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GetRateTest extends TestCase

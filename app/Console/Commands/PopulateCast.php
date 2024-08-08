@@ -47,13 +47,14 @@ class PopulateCast extends Command
             $cast = $fetch("movie/$id/credits?language=en-US", 'cast');
             $castIds = [];
             foreach ($cast as $actor){
-                $c = Cast::updateOrCreate(
+                Cast::updateOrCreate(
                     ['id' => $actor['id']],
                     [
                         'id' => $actor['id'],
                         'name'=>  $actor['original_name'],
                         'image_path' => $actor['profile_path'] ?? "no-image",
-                        'role' => $actor['known_for_department']
+                        'role' => $actor['known_for_department'],
+                        'about' => $actor['biography']
                     ]
                 );
                 $castIds[] = $actor['id'];
