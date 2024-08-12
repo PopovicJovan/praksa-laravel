@@ -22,8 +22,8 @@ class CreateCommentTest extends TestCase
 
     public function test_create_reply()
     {
-        $movie = Movie::inRandomOrder()->first();
-        $comment = Comment::where('parent_id', null)->first();
+        $comment = Comment::where('parent_id', null)->inRandomOrder()->first();
+        $movie = Movie::where('id', $comment->movie_id)->first();
         $user = User::inRandomOrder()->first();
         $token = $this->login($user->email);
 

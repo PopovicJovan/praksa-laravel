@@ -29,4 +29,12 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id');
     }
 
+    public function getAllReplies(Movie $movie)
+    {
+        return $this->where('movie_id', $movie->id)
+            ->whereNull('parent_id')
+            ->with('replies')
+            ->get();
+    }
+
 }

@@ -16,9 +16,7 @@ class RateController extends Controller
 
         $request->validate(['rate' => 'required|integer|between:1,5']);
 
-        if (!Rate::where('user_id', $user->id)
-            ->where('movie_id', $movie->id)
-            ->first()){
+        if (!(new Rate())->getUserRate($user, $movie)){
             $movie->vote_count += 1;
         }
         Rate::updateOrCreate(
@@ -36,9 +34,7 @@ class RateController extends Controller
 
     public function show(Movie $movie, Request $request)
     {
-        $rate = Rate::where('movie_id', $movie->id)
-                ->where('user_id', $request->user()->id)
-                ->firstOrFail();
+        $rate = (new Rate())->getUserRateOrFail($movie);
         return response()->json([
             "data" => new RateResource($rate)
         ], 200);

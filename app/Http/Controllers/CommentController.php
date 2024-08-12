@@ -43,10 +43,7 @@ class CommentController extends Controller
 
     public function index(Movie $movie, Request $request)
     {
-        $comments = Comment::where('movie_id', $movie->id)
-            ->whereNull('parent_id')
-            ->with('replies')
-            ->get();
+        $comments = (new Comment())->getAllReplies($movie);
         return response()->json([
             'data' => new CommentCollection($comments)
         ]);
