@@ -51,7 +51,7 @@ class PopulateDatabase extends Command
             );
         }
 
-        for ($i = 1; $i < 15 ; $i++) {
+        for ($i = 1; $i < 100 ; $i++) {
             try {
                 $movies = $fetch("discover/movie?page=$i", 'results');
                 foreach ($movies as $movie) {
