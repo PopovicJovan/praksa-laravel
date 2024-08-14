@@ -30,7 +30,7 @@ class GenreController extends Controller
         return response()->json([
             'data' => [
                 new GenreResource($genre),
-                new MovieCollection(Movie::take(10)->get())
+                new MovieCollection($genre->movies()->take(10)->get())
             ]
         ]);
     }
