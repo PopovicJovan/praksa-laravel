@@ -51,4 +51,15 @@ class Movie extends Model
     {
         return $this->belongsToMany(Cast::class, 'movie_cast');
     }
+
+    public function getAllSearchedMovies(string $title, string $genre)
+    {
+        return $this->when($title, function ($query) use($title){
+            $query->where('title', 'LIKE', '%'. $title .'%');
+        })->when($genre, function ($query) use($genre){
+            $query->whereHas('genres', function ($q) use($genre){
+                $q->where('genres.id', $genre);
+            });
+        })->get();
+    }
 }
