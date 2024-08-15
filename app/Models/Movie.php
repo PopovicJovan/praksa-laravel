@@ -60,6 +60,6 @@ class Movie extends Model
             $query->whereHas('genres', function ($q) use($genre){
                 $q->where('genres.id', $genre);
             });
-        })->get();
+        })->paginate(10);
     }
 }
