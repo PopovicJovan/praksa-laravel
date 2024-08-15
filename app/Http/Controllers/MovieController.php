@@ -17,7 +17,8 @@ class MovieController extends Controller
         $movies = (new Movie())->getAllSearchedMovies($title, $genre);
 
         return response()->json([
-            "data" => new MovieCollection($movies)
+            "data" => new MovieCollection($movies),
+            "last_page" => $movies->lastPage()
         ]);
     }
 
@@ -32,10 +33,11 @@ class MovieController extends Controller
     public function getWatchLaterMovies(Request $request)
     {
         $user = $request->user();
-        $movies = $user->watchLaterMovies;
+        $movies = $user->watchLaterMovies()->paginate(10);
 
         return response()->json([
-            "data" => new MovieCollection($movies)
+            "data" => new MovieCollection($movies),
+            "last_page" => $movies->lastPage()
         ]);
     }
 
