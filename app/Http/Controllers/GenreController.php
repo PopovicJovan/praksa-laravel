@@ -20,7 +20,10 @@ class GenreController extends Controller
     {
         $movies = $genre->movies()->paginate(10);
         return response()->json([
-            "data" => new MovieCollection($movies),
+            "data" => [
+                new GenreResource($genre),
+                new MovieCollection($movies)
+            ],
             "last_page" => $movies->lastPage()
         ]);
     }
