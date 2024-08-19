@@ -12,10 +12,15 @@ class MovieController extends Controller
     public function index()
     {
         $title = request('title');
-        $genre = request('genre');
+
+        $allowed = Genre::pluck('id')->toArray();
+        $genres = array_map('trim', explode(',',request('genre') ));
+        $expectedGenres = array_filter($genres, function($genre) use ($allowed) {
+            return in_array($genre, $allowed);
+        });
 
         $paginate = request('paginate') ?? 10;
-        $movies = (new Movie())->getAllSearchedMovies($title, $genre, $paginate);
+        $movies = (new Movie())->getAllSearchedMovies($title, $expectedGenres, $paginate);
         return response()->json([
             "data" => new MovieCollection($movies),
             "last_page" => $movies->lastPage()
