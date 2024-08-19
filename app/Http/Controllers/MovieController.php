@@ -13,8 +13,8 @@ class MovieController extends Controller
     {
         $title = request('title');
         $genre = request('genre');
-        
-        $movies = (new Movie())->getAllSearchedMovies($title, $genre);
+        $paginate = request('paginate') ?? 10;
+        $movies = (new Movie())->getAllSearchedMovies($title, $genre, $paginate);
 
         return response()->json([
             "data" => new MovieCollection($movies),
@@ -33,7 +33,8 @@ class MovieController extends Controller
     public function getWatchLaterMovies(Request $request)
     {
         $user = $request->user();
-        $movies = $user->watchLaterMovies()->paginate(10);
+        $paginate = request('paginate') ?? 10;
+        $movies = $user->watchLaterMovies()->paginate($paginate);
 
         return response()->json([
             "data" => new MovieCollection($movies),
