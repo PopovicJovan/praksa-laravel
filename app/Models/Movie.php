@@ -52,7 +52,7 @@ class Movie extends Model
         return $this->belongsToMany(Cast::class, 'movie_cast');
     }
 
-    public function getAllSearchedMovies(string $title, string $genre)
+    public function getAllSearchedMovies(string $title, string $genre, $paginate)
     {
         return $this->when($title, function ($query) use($title){
             $query->where('title', 'LIKE', '%'. $title .'%');
@@ -60,6 +60,6 @@ class Movie extends Model
             $query->whereHas('genres', function ($q) use($genre){
                 $q->where('genres.id', $genre);
             });
-        })->paginate(10);
+        })->paginate($paginate);
     }
 }
