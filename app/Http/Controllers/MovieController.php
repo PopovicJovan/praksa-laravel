@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Movie\MovieResource;
 use App\Http\Resources\Movie\MovieCollection;
+use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,15 @@ class MovieController extends Controller
     public function index()
     {
         $title = request('title');
-        $genre = request('genre');
+        
+        $allowed = Genre::pluck('id')->toArray();
+        $genres = array_map('trim', explode(',',request('genre') ));
+        $expectedGenres = array_filter($genres, function($genre) use ($allowed) {
+            return in_array($genre, $allowed);
+        });
+
         $paginate = request('paginate') ?? 10;
-        $movies = (new Movie())->getAllSearchedMovies($title, $genre, $paginate);
+        $movies = (new Movie())->getAllSearchedMovies($title, $expectedGenres, $paginate);
 
         return response()->json([
             "data" => new MovieCollection($movies),
