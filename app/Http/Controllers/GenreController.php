@@ -18,7 +18,8 @@ class GenreController extends Controller
 
     public function getAllMovies(Genre $genre)
     {
-        $movies = $genre->movies()->paginate(10);
+        $paginate = request('paginate') ?? 10;
+        $movies = $genre->movies()->paginate($paginate);
         return response()->json([
             "data" => [
                 new GenreResource($genre),
