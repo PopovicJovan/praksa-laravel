@@ -43,7 +43,8 @@ return [
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN'),
+            'local_domain' => env('MAIL_EHLO_DOMAIN', '127.0.0.1:8000'),
+            'verify_peer' => false,
         ],
 
         'ses' => [

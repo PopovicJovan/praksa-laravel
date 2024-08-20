@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class PasswordResetLinkController extends Controller
 {
@@ -36,4 +37,5 @@ class PasswordResetLinkController extends Controller
 
         return response()->json(['status' => __($status)]);
     }
+
 }
