@@ -9,6 +9,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\CastController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +52,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::put('/comment/{comment}', [CommentController::class, 'update']);
     Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);
 });
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
