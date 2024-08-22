@@ -21,7 +21,6 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $user = User::all()->where('email', $request->input('email'))->first();
-
         $token = $user->createToken('api-token');
         return response()->json([
             'user' => $user,
